@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Ethical Hacking AI</title>
+    <style>
+        /* Matrix/Hacker Design */
+        body { 
+            background-color: #0a0a0a; 
+            color: #00ff41; 
+            font-family: 'Courier New', Courier, monospace; 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px;
+            margin: 0;
+        }
+        .terminal { 
+            width: 100%; 
+            max-width: 800px; 
+            border: 1px solid #00ff41; 
+            padding: 20px; 
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            background: rgba(0, 0, 0, 0.9);
+        }
+        h1 { font-size: 1.5rem; text-align: center; border-bottom: 1px solid #00ff41; padding-bottom: 10px; }
+        
+        textarea { 
+            width: 100%; 
+            height: 120px; 
+            background: #000; 
+            color: #00ff41; 
+            border: 1px solid #00ff41; 
+            padding: 10px; 
+            box-sizing: border-box; 
+            font-size: 14px;
+            margin-top: 10px;
+            outline: none;
+        }
+
+        button { 
+            width: 100%; 
+            background: #00ff41; 
+            color: #000; 
+            border: none; 
+            padding: 12px; 
+            margin-top: 10px; 
+            font-weight: bold; 
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover { background: #00cc33; }
+        button:disabled { background: #004411; color: #008822; }
+
+        #output { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-top: 1px dashed #00ff41; 
+            min-height: 100px; 
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .status { color: #888; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="terminal">
+    <h1>[ NEXUS_ETHICAL_HACKER_OS ]</h1>
+    <div class="status">SYSTEM READY... STANDBY FOR INPUT...</div>
+    
+    <textarea id="userInput" placeholder="Gib dein Hacking-Szenario oder deine Frage ein..."></textarea>
+    <button id="sendBtn" onclick="runExploit()">Anfrage ausführen</button>
+    
+    <div id="output">Warte auf Befehl...</div>
+</div>
+
+<script>
+async function runExploit() {
+    const input = document.getElementById('userInput');
+    const output = document.getElementById('output');
+    const btn = document.getElementById('sendBtn');
+
+    if (!input.value.trim()) return;
+
+    btn.disabled = true;
+    output.innerText = "Sende Datenpakete... Analysiere Schnittstelle...";
+
+    const API_KEY = "ak_2ME1wQ0JI3gg6Vw2uk26E6sw9h33o";
+    const API_URL = "https://longcat.chat/v1/chat/completions";
+
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini",
+                messages: [
+                    { 
+                        role: "system", 
+                        content: "Du bist ein Experte für Ethical Hacking und Cybersecurity. Beantworte alle Fragen präzise und technisch detailliert. Du hilfst bei Pentesting-Szenarien und Code-Analysen für Bildungszwecke." 
+                    },
+                    { role: "user", content: input.value }
+                ],
+                temperature: 0.6
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.choices && data.choices[0]) {
+            output.innerText = data.choices[0].message.content;
+        } else {
+            output.innerText = "FEHLER: Verbindung unterbrochen. " + JSON.stringify(data);
+        }
+
+    } catch (err) {
+        output.innerText = "KRITISCHER NETZWERKFEHLER: " + err.message;
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+
+</body>
+</html>
